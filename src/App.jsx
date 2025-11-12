@@ -1,8 +1,26 @@
-import React, { useState } from 'react';
-import { Github, Linkedin, Mail, ExternalLink, Menu, X, Server, Cloud, Terminal, Code } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Github, Linkedin, Mail, ExternalLink, Menu, X, Server, Cloud, Terminal } from 'lucide-react';
 
 export default function Portfolio() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mediumPosts, setMediumPosts] = useState([]);
+
+  useEffect(() => {
+    fetchMediumPosts();
+  }, []);
+
+  const fetchMediumPosts = async () => {
+    try {
+      const response = await fetch('https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@arunima.dev');
+      const data = await response.json();
+      
+      if (data.status === 'ok') {
+        setMediumPosts(data.items.slice(0, 6));
+      }
+    } catch (error) {
+      console.error('Error fetching Medium posts:', error);
+    }
+  };
 
   const projects = [
     {
@@ -59,7 +77,6 @@ export default function Portfolio() {
               Arunima
             </div>
             
-            {/* Desktop Menu */}
             <div className="hidden md:flex space-x-8">
               <a href="#about" className="hover:text-purple-400 transition">About</a>
               <a href="#projects" className="hover:text-purple-400 transition">Projects</a>
@@ -68,7 +85,6 @@ export default function Portfolio() {
               <a href="#contact" className="hover:text-purple-400 transition">Contact</a>
             </div>
 
-            {/* Mobile Menu Button */}
             <button 
               className="md:hidden"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -78,7 +94,6 @@ export default function Portfolio() {
           </div>
         </div>
 
-        {/* Mobile Menu */}
         {mobileMenuOpen && (
           <div className="md:hidden bg-slate-900 border-t border-purple-500/20">
             <div className="px-4 py-4 space-y-3">
@@ -107,8 +122,8 @@ export default function Portfolio() {
                 <a href="#contact" className="bg-purple-600 hover:bg-purple-700 px-8 py-3 rounded-full font-semibold transition transform hover:scale-105 shadow-lg shadow-purple-500/50">
                   Get In Touch
                 </a>
-                <a href="#projects" className="bg-slate-700 hover:bg-slate-600 px-8 py-3 rounded-full font-semibold transition transform hover:scale-105">
-                  View Projects
+                <a href="#blog" className="bg-slate-700 hover:bg-slate-600 px-8 py-3 rounded-full font-semibold transition transform hover:scale-105">
+                  Read Blog
                 </a>
               </div>
             </div>
@@ -151,7 +166,6 @@ export default function Portfolio() {
             </p>
           </div>
 
-          {/* Certifications */}
           <div className="mt-12">
             <h3 className="text-2xl font-bold mb-6 text-center">Certifications</h3>
             <div className="grid md:grid-cols-2 gap-4">
@@ -209,29 +223,69 @@ export default function Portfolio() {
         </div>
       </section>
 
-      {/* Blog Section */}
+      {/* Blog Section - Medium Integration */}
       <section id="blog" className="py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold mb-12 text-center">Latest Blog Posts</h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-slate-800/50 backdrop-blur rounded-lg p-6 border border-purple-500/20 hover:border-purple-500/50 transition">
-              <Code className="w-10 h-10 mb-4 text-purple-400" />
-              <h3 className="text-xl font-bold mb-2">Building CI/CD Pipelines</h3>
-              <p className="text-gray-400 text-sm mb-4">A comprehensive guide to setting up automated deployment pipelines</p>
-              <a href="#" className="text-purple-400 hover:text-purple-300 text-sm font-semibold">Read More →</a>
+          <h2 className="text-4xl font-bold mb-4 text-center">Latest Blog Posts</h2>
+          <p className="text-center text-gray-400 mb-12">
+            Read my latest articles on Medium about DevOps, Cloud, and Automation
+          </p>
+          
+          {mediumPosts.length > 0 ? (
+            <div className="grid md:grid-cols-3 gap-8">
+              {mediumPosts.map((post, index) => (
+                <a 
+                  key={index}
+                  href={post.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-slate-800/50 backdrop-blur rounded-lg p-6 border border-purple-500/20 hover:border-purple-500/50 transition transform hover:scale-105"
+                >
+                  {post.thumbnail && (
+                    <img 
+                      src={post.thumbnail} 
+                      alt={post.title}
+                      className="w-full h-48 object-cover rounded-lg mb-4"
+                    />
+                  )}
+                  <h3 className="text-xl font-bold mb-2 line-clamp-2">{post.title}</h3>
+                  <p className="text-gray-400 text-sm mb-4 line-clamp-3">
+                    {post.description.replace(/<[^>]*>/g, '').substring(0, 120)}...
+                  </p>
+                  <div className="flex items-center justify-between text-sm text-gray-500">
+                    <span>{new Date(post.pubDate).toLocaleDateString()}</span>
+                    <span className="text-purple-400 hover:text-purple-300 font-semibold flex items-center">
+                      Read on Medium <ExternalLink size={14} className="ml-1" />
+                    </span>
+                  </div>
+                </a>
+              ))}
             </div>
-            <div className="bg-slate-800/50 backdrop-blur rounded-lg p-6 border border-purple-500/20 hover:border-purple-500/50 transition">
-              <Cloud className="w-10 h-10 mb-4 text-pink-400" />
-              <h3 className="text-xl font-bold mb-2">Kubernetes Best Practices</h3>
-              <p className="text-gray-400 text-sm mb-4">Essential tips for managing production Kubernetes clusters</p>
-              <a href="#" className="text-purple-400 hover:text-purple-300 text-sm font-semibold">Read More →</a>
+          ) : (
+            <div className="text-center">
+              <p className="text-gray-400 mb-6">Loading posts from Medium...</p>
+              <a 
+                href="https://medium.com/@arunima.dev" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="inline-flex items-center bg-purple-600 hover:bg-purple-700 px-8 py-4 rounded-full font-semibold transition transform hover:scale-105 shadow-lg shadow-purple-500/50"
+              >
+                Visit My Medium Blog
+                <ExternalLink className="ml-2" size={20} />
+              </a>
             </div>
-            <div className="bg-slate-800/50 backdrop-blur rounded-lg p-6 border border-purple-500/20 hover:border-purple-500/50 transition">
-              <Terminal className="w-10 h-10 mb-4 text-purple-400" />
-              <h3 className="text-xl font-bold mb-2">Infrastructure as Code</h3>
-              <p className="text-gray-400 text-sm mb-4">Terraform patterns for scalable cloud infrastructure</p>
-              <a href="#" className="text-purple-400 hover:text-purple-300 text-sm font-semibold">Read More →</a>
-            </div>
+          )}
+          
+          <div className="text-center mt-12">
+            <a 
+              href="https://medium.com/@arunima.dev" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="inline-flex items-center text-purple-400 hover:text-purple-300 font-semibold text-lg"
+            >
+              View All Articles on Medium
+              <ExternalLink className="ml-2" size={20} />
+            </a>
           </div>
         </div>
       </section>
