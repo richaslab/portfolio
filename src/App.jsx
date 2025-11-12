@@ -54,17 +54,16 @@ export default function Portfolio() {
   ];
 
   const skills = [
-    "AWS", "Azure", "GCP", "Docker", "Kubernetes",
+    "AWS", "GCP", "Docker", "Kubernetes",
     "Terraform", "Ansible", "Jenkins", "GitLab CI",
     "Prometheus", "Grafana", "ELK Stack", "Python",
-    "Bash", "Linux", "Git", "ArgoCD"
+    "Bash", "Linux", "Git"
   ];
 
   const certifications = [
-    "AWS Certified Solutions Architect",
-    "Certified Kubernetes Administrator (CKA)",
-    "HashiCorp Certified: Terraform Associate",
-    "Docker Certified Associate"
+    "AWS Certified DevOps Engineer – Professional",
+    "AWS Certified SysOps Administrator - Associate",
+    "HashiCorp Certified: Terraform Associate"
   ];
 
   return (
@@ -298,13 +297,13 @@ export default function Portfolio() {
             Interested in collaborating or discussing DevOps strategies? Let's talk!
           </p>
           <div className="flex justify-center space-x-6">
-            <a href="mailto:your.email@example.com" className="bg-slate-700 hover:bg-slate-600 p-4 rounded-full transition transform hover:scale-110 shadow-lg shadow-purple-500/20">
+            <a href="mailto:arunima.dhar24@gmail.com" className="bg-slate-700 hover:bg-slate-600 p-4 rounded-full transition transform hover:scale-110 shadow-lg shadow-purple-500/20">
               <Mail size={24} />
             </a>
-            <a href="https://github.com/yourusername" target="_blank" rel="noopener noreferrer" className="bg-slate-700 hover:bg-slate-600 p-4 rounded-full transition transform hover:scale-110 shadow-lg shadow-purple-500/20">
+            <a href="https://github.com/richaslab" target="_blank" rel="noopener noreferrer" className="bg-slate-700 hover:bg-slate-600 p-4 rounded-full transition transform hover:scale-110 shadow-lg shadow-purple-500/20">
               <Github size={24} />
             </a>
-            <a href="https://linkedin.com/in/yourusername" target="_blank" rel="noopener noreferrer" className="bg-slate-700 hover:bg-slate-600 p-4 rounded-full transition transform hover:scale-110 shadow-lg shadow-purple-500/20">
+            <a href="https://linkedin.com/in/arunima-dhar-95866210" target="_blank" rel="noopener noreferrer" className="bg-slate-700 hover:bg-slate-600 p-4 rounded-full transition transform hover:scale-110 shadow-lg shadow-purple-500/20">
               <Linkedin size={24} />
             </a>
           </div>
